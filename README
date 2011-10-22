@@ -1,9 +1,7 @@
 This is a mirror of http://www.vim.org/scripts/script.php?script_id=3659
 
-A port of LustyExplorer (vimscript #1890) re-written in Python to avoid the segfaults I kept getting with the vim-ruby code.
+A port of LustyExplorer (vimscript #1890) to Python, my thanks to Stephen Bach for providing such a great script in the first place.
 
-My thanks to Stephen Bach for providing such a great script in the first place.
-
-Keybindings are the same as Lusty, ,lf to open a file with the starting directory being the current working dir, ,lr to do so but at the current buffer's directory, ,lb to access your buffers and ,lg to grep the currently opened buffer (buffer grep is currently broken, it's not a feature I used often so it still needs a little love). Further bindings and instructions are found in lycosaexplorer.vim
+Basic keybindings are <leader>lf to open a file with the starting directory being the current working dir, <leader>lr to do so but at the current buffer's directory and <leader>lb to access your buffers. Further bindings and instructions are found in lycosaexplorer.vim
 
 This project is also available on bitbucket at https://bitbucket.org/mikehart/lycosaexplorer

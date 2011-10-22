@@ -1,4 +1,0 @@
-repo: a7a50541337aa683c017304a23b1953273b4e3d6
-node: 60cfcb855d0df123b0e2d70e7bdcbd15cde151bb
-branch: default
-tag: 0.5
