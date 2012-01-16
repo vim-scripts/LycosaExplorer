@@ -14,7 +14,7 @@
 "  Maintainers: Michael Hart
 "
 " Release Date: January 16 2012
-"      Version: 0.8
+"      Version: 0.9
 "
 "        Usage:
 "                 <Leader>lf  - Opens the filesystem explorer.
@@ -63,6 +63,7 @@
 "                 <C-r>    [r]efresh directory contents
 "                 <C-a>    open [a]ll files in current tab
 "                 <C-e>    create new buffer with the given name and path
+"                 <C-y>    call callback, see install instructions below
 "
 " Filesystem Explorer:
 "
@@ -118,6 +119,15 @@
 " already provided. You can do this so like this (in .vimrc)
 "
 "   let g:LycosaExplorerDefaultMappings = 0
+"
+" You can set a callback to be run with the current directory name when C-y is
+" pressed in a filesystem explorer, for example:
+"
+"   function g:example_callback(dirname)
+"       echo a:dirname
+"   endfunction
+"
+"   let g:LycosaExplorerYankCallback = "g:example_callback"
 
 " Exit quickly when already loaded.
 if exists("g:loaded_lycosaexplorer")

@@ -524,6 +524,7 @@ class FilesystemExplorer(Explorer):
         Explorer.__init__(self)
         self.prompt = FilesystemPrompt()
         self.memoized_dir_contents = {}
+        self._yank_callback = None
 
     def run(self):
         if self.running:
@@ -551,7 +552,7 @@ class FilesystemExplorer(Explorer):
                 if self.prompt.at_dir():
                     path_str = self.prompt.input + e.label
                 else:
-                    path_str = os.path.join(self.prompt.dirname, e.label)
+                    path_str = os.path.join(self.prompt.dirname(), e.label)
 
                 if os.path.isfile(path_str):
                     self.load_file(path_str, self.CURRENT_TAB)
@@ -565,6 +566,15 @@ class FilesystemExplorer(Explorer):
         elif i == 18:  # <C-r> refresh
             del self.memoized_dir_contents[self.view_path()]
             self._refresh(self.FULL)
+        elif i == 24:  # C-y yank to external function
+            if self._yank_callback is not None:
+                if self.prompt.at_dir():
+                    dirname = self.prompt.input
+                else:
+                    dirname = self.prompt.dirname()
+                self.cancel()
+                vim.eval("%s('%s')" % (self._yank_callback,
+                                       single_quote_escape(dirname)))
         else:
             Explorer.key_pressed(self)
 
@@ -607,6 +617,16 @@ class FilesystemExplorer(Explorer):
         else:
             path = os.path.dirname(input_)
         return os.path.abspath(path)
+
+    def _create_explorer_window(self):
+        Explorer._create_explorer_window(self)
+        opt_name = "g:LycosaExplorerYankCallback"
+        if eval_bool("exists('%s') && %s != '0'" % (opt_name, opt_name)):
+            self._yank_callback = vim.eval("%s" % opt_name)
+            mapcmd = "noremap <silent> <buffer>"
+            key_binding_prefix = "Lycosa" + self.__class__.__name__
+            vim.command("%s %s    :call <SID>%sKeyPressed(%d)<CR>" % (
+                mapcmd, '<C-y>', key_binding_prefix, 24))
 
     def all_files_at_view(self):
         view = self.view_path()
@@ -657,10 +677,11 @@ class FilesystemExplorer(Explorer):
 
             if abbrev == '.':
                 # Sort alphabetically, otherwise it just looks weird.
-                return sorted(matches, key=operator.attrgetter("label"))
+                order_fn = operator.attrgetter("label")
             else:
                 # Sort by score.
-                return sorted(matches, key=lambda x: -x.current_score)
+                order_fn = lambda x: -x.current_score
+            return sorted(matches, key=order_fn)
 
     def _open_entry(self, entry, open_mode):
         path = os.path.join(self.view_path(), entry.label)
