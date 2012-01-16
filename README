@@ -1,6 +1,6 @@
 This is a mirror of http://www.vim.org/scripts/script.php?script_id=3659
 
-A port of LustyExplorer (vimscript #1890) to Python, my thanks to Stephen Bach for providing such a great script in the first place.
+Originally a simple port of LustyExplorer (vimscript #1890) to Python.
 
 Basic keybindings are <leader>lf to open a file with the starting directory being the current working dir, <leader>lr to do so but at the current buffer's directory and <leader>lb to access your buffers. Further bindings and instructions are found in lycosaexplorer.vim
 
